@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
           }
         });
       }
-			const apiInstance = sunoApi();
+			const apiInstance = await sunoApi();
       const lyrics = await (await apiInstance).generateLyrics(prompt);
 
       return new NextResponse(JSON.stringify(lyrics), {
