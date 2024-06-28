@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 export async function GET(req: NextRequest) {
   if (req.method === 'GET') {
     try {
-			const apiInstance = sunoApi();
+			const apiInstance = await sunoApi();
       const limit = await (await apiInstance).get_credits();
 
 
