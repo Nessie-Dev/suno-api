@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
           }
         });
       }
-
-      const audioInfo = await (await sunoApi)
+			const apiInstance = sunoApi();
+      const audioInfo = await (await apiInstance)
         .extendAudio(audio_id, prompt, continue_at, tags, title, model || DEFAULT_MODEL);
 
       return new NextResponse(JSON.stringify(audioInfo), {
