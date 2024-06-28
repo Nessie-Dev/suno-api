@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
           }
         });
       }
-      const apiInstance = sunoApi();
+      const apiInstance = await sunoApi();
       const audioInfo = await (await apiInstance).custom_generate(
         prompt, tags, title,
         Boolean(make_instrumental),
