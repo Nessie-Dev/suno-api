@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
       const url = new URL(req.url);
       const songIds = url.searchParams.get('ids');
       let audioInfo = [];
-      const apiInstance = sunoApi();
+      const apiInstance = await sunoApi();
       if (songIds && songIds.length > 0) {
         const idsArray = songIds.split(',');
         audioInfo = await (await apiInstance).get(idsArray);
