@@ -19,7 +19,7 @@ export async function GET(req: NextRequest) {
         });
       }
 
-      const apiInstance = sunoApi();
+      const apiInstance = await sunoApi();
       const audioInfo = await (await apiInstance).getClip(clipId);
 
       return new NextResponse(JSON.stringify(audioInfo), {
