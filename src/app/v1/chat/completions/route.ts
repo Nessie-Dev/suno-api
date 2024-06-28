@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     }
 
 
-    const apiInstance = sunoApi();
+    const apiInstance = await sunoApi();
     const audioInfo = await (await apiInstance).generate(userMessage.content, true, DEFAULT_MODEL, true);
 
     const audio = audioInfo[0]
