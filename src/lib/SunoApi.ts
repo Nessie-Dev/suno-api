@@ -112,7 +112,7 @@ class SunoApi {
   ): Promise<AudioInfo[]> {
     await this.keepAlive(false);
     const startTime = Date.now();
-    const audios = this.generateSongs(prompt, false, undefined, undefined, make_instrumental, model, wait_audio);
+    const audios = await this.generateSongs(prompt, false, undefined, undefined, make_instrumental, model, wait_audio);
     const costTime = Date.now() - startTime;
     logger.info("Generate Response:\n" + JSON.stringify(audios, null, 2));
     logger.info("Cost time: " + costTime);
