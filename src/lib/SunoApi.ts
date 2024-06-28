@@ -400,8 +400,26 @@ const newSunoApi = async (cookie: string) => {
   return await sunoApi.init();
 }
 
-if (!process.env.SUNO_COOKIE) {
-  console.log("Environment does not contain SUNO_COOKIE.", process.env)
+const cookies = [];
+const sunoApiInstances: SunoApi[] = [];
+let currentIndex = 0;
+
+const createSunoApiInstances = async () => {
+  for (const cookie of cookies) {
+    const sunoApi = new SunoApi(cookie);
+    await sunoApi.init();
+    sunoApiInstances.push(sunoApi);
+  }
 }
 
-export const sunoApi = newSunoApi(process.env.SUNO_COOKIE || '');
+const getNextSunoApiInstance = () => {
+  const instance = sunoApiInstances[currentIndex];
+  currentIndex = (currentIndex + 1) % sunoApiInstances.length;
+  return instance;
+}
+
+
+await createSunoApiInstances();
+
+
+export const sunoApi = getNextSunoApiInstance;
