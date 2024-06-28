@@ -19,7 +19,8 @@ export async function GET(req: NextRequest) {
         });
       }
 
-      const audioInfo = await (await sunoApi).getClip(clipId);
+      const apiInstance = sunoApi();
+      const audioInfo = await (await apiInstance).getClip(clipId);
 
       return new NextResponse(JSON.stringify(audioInfo), {
         status: 200,
