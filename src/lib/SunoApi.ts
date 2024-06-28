@@ -406,20 +406,32 @@ let currentIndex = 0;
 
 const createSunoApiInstances = async () => {
   for (const cookie of cookies) {
-    const sunoApi = new SunoApi(cookie);
-    await sunoApi.init();
-    sunoApiInstances.push(sunoApi);
+    try {
+      const sunoApi = await newSunoApi(cookie);
+      sunoApiInstances.push(sunoApi);
+    } catch (e) {
+      console.error(`Error creating SunoApi instance: ${e}`);
+    }
   }
-}
+  console.log(`Created ${sunoApiInstances.length} sunoApi instances.`);
+};
 
-const getNextSunoApiInstance = () => {
+const getNextSunoApiInstance = async () => {
+  if (sunoApiInstances.length === 0) {
+    try {
+      await createSunoApiInstances();
+    } catch (e) {
+      console.log(e);
+    }
+  }
   const instance = sunoApiInstances[currentIndex];
   currentIndex = (currentIndex + 1) % sunoApiInstances.length;
   return instance;
-}
+};
 
-
-await createSunoApiInstances();
+(async () => {
+  await createSunoApiInstances();
+})();
 
 
 export const sunoApi = getNextSunoApiInstance;
