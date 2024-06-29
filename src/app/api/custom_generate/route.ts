@@ -9,7 +9,17 @@ export async function POST(req: NextRequest) {
   if (req.method === 'POST') {
     try {
       const body = await req.json();
-      const { prompt, tags, title, make_instrumental, model, wait_audio } = body;
+      const { prompt, tags, title, make_instrumental, model, wait_audio, instance } = body;
+			if (!instance || isNaN(Number(instance))) {
+      return new NextResponse(JSON.stringify({ error: 'instance parameter is required and should be a valid number.' }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      });
+      }
+
       if (!prompt || !tags || !title) {
         return new NextResponse(JSON.stringify({ error: 'Prompt, tags, and title are required' }), {
           status: 400,
@@ -19,7 +29,7 @@ export async function POST(req: NextRequest) {
           }
         });
       }
-      const apiInstance = await sunoApi();
+      const apiInstance = await sunoApi(Number(instance));
       const audioInfo = await (await apiInstance).custom_generate(
         prompt, tags, title,
         Boolean(make_instrumental),
