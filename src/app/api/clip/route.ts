@@ -8,7 +8,17 @@ export async function GET(req: NextRequest) {
   if (req.method === 'GET') {
     try {
       const url = new URL(req.url);
-      const clipId = url.searchParams.get('id');
+      const clipId = url.searchParams.get('clipId');
+      const instance = url.searchParams.get('id');
+      if (!instance || isNaN(Number(instance))) {
+      return new NextResponse(JSON.stringify({ error: 'id parameter is required and should be a valid number.' }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      });
+      }
       if (clipId == null) {
         return new NextResponse(JSON.stringify({ error: 'Missing parameter id' }), {
           status: 400,
@@ -32,7 +42,7 @@ export async function GET(req: NextRequest) {
     } catch (error) {
       console.error('Error fetching audio:', error);
 
-      return new NextResponse(JSON.stringify({ error: 'Internal server error' }), {
+      return new NextResponse(JSON.stringify({ error: 'Internal server error' + error.message }), {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
