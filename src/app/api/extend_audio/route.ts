@@ -8,8 +8,16 @@ export async function POST(req: NextRequest) {
   if (req.method === 'POST') {
     try {
       const body = await req.json();
-      const { audio_id, prompt, continue_at, tags, title, model } = body;
-
+      const { audio_id, prompt, continue_at, tags, title, model, instance } = body;
+      if (!instance || isNaN(Number(instance))) {
+      return new NextResponse(JSON.stringify({ error: 'instance parameter is required and should be a valid number.' }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      });
+      }
       if (!audio_id) {
         return new NextResponse(JSON.stringify({ error: 'Audio ID is required' }), {
           status: 400,
@@ -19,7 +27,7 @@ export async function POST(req: NextRequest) {
           }
         });
       }
-			const apiInstance = await sunoApi();
+			const apiInstance = await sunoApi(Number(instance));
       const audioInfo = await (await apiInstance)
         .extendAudio(audio_id, prompt, continue_at, tags, title, model || DEFAULT_MODEL);
 
