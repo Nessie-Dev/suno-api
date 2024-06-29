@@ -14,7 +14,16 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
 
     let userMessage = null;
-    const { messages } = body;
+    const { messages, instance } = body;
+    if (!instance || isNaN(Number(instance))) {
+      return new NextResponse(JSON.stringify({ error: 'instance parameter is required and should be a valid number.' }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      });
+    }
     for (let message of messages) {
       if (message.role == 'user') {
         userMessage = message;
@@ -32,7 +41,7 @@ export async function POST(req: NextRequest) {
     }
 
 
-    const apiInstance = await sunoApi();
+    const apiInstance = await sunoApi(Number(instance));
     const audioInfo = await (await apiInstance).generate(userMessage.content, true, DEFAULT_MODEL, true);
 
     const audio = audioInfo[0]
