@@ -6,10 +6,22 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   if (req.method === 'GET') {
-    try {
-			const apiInstance = await sunoApi();
-      const limit = await (await apiInstance).get_credits();
+    const url = new URL(req.url);
+    const id = url.searchParams.get('id');
 
+    if (!id || isNaN(Number(id))) {
+      return new NextResponse(JSON.stringify({ error: 'id parameter is required and should be a valid number.' }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      });
+    }
+
+    try {
+      const apiInstance = await sunoApi(id);
+      const limit = await apiInstance.get_credits();
 
       return new NextResponse(JSON.stringify(limit), {
         status: 200,
