@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-      const apiInstance = await sunoApi(id);
+      const apiInstance = await sunoApi(Number(id));
       const limit = await apiInstance.get_credits();
 
       return new NextResponse(JSON.stringify(limit), {
