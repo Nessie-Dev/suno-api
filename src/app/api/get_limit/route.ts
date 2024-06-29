@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     } catch (error) {
       console.error('Error fetching limit:', error);
 
-      return new NextResponse(JSON.stringify({ error: 'Internal server error. ' + error }), {
+      return new NextResponse(JSON.stringify({ error: 'Internal server error. ' + error.message }), {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
