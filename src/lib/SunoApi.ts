@@ -402,7 +402,6 @@ const newSunoApi = async (cookie: string) => {
 
 const cookies = [];
 const sunoApiInstances: SunoApi[] = [];
-let currentIndex = 0;
 
 const createSunoApiInstances = async () => {
   for (const cookie of cookies) {
@@ -416,7 +415,7 @@ const createSunoApiInstances = async () => {
   console.log(`Created ${sunoApiInstances.length} sunoApi instances.`);
 };
 
-const getNextSunoApiInstance = async () => {
+const getNextSunoApiInstance = async (instanceNumber) => {
   if (sunoApiInstances.length === 0) {
     try {
       await createSunoApiInstances();
@@ -424,14 +423,14 @@ const getNextSunoApiInstance = async () => {
       console.log(e);
     }
   }
-  const instance = sunoApiInstances[currentIndex];
-  currentIndex = (currentIndex + 1) % sunoApiInstances.length;
-  return instance;
-};
 
-(async () => {
-  await createSunoApiInstances();
-})();
+  if (instanceNumber < 1 || instanceNumber > sunoApiInstances.length) {
+    throw new Error(`Invalid instance number. Please provide a number between 1 and ${sunoApiInstances.length}.`);
+  }
+
+  const instanceIndex = instanceNumber - 1;
+  return sunoApiInstances[instanceIndex];
+};
 
 
 export const sunoApi = getNextSunoApiInstance;
