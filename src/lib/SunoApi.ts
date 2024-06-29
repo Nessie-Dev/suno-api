@@ -415,7 +415,7 @@ const createSunoApiInstances = async () => {
   console.log(`Created ${sunoApiInstances.length} sunoApi instances.`);
 };
 
-const getNextSunoApiInstance = async (instanceNumber) => {
+const getNextSunoApiInstance = async (instanceNumber: number) => {
   if (sunoApiInstances.length === 0) {
     try {
       await createSunoApiInstances();
