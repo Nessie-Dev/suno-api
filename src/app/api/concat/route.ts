@@ -9,6 +9,15 @@ export async function POST(req: NextRequest) {
     try {
       const body = await req.json();
       const { clip_id, instance } = body;
+      if (!instance || isNaN(Number(instance))) {
+      return new NextResponse(JSON.stringify({ error: 'instance parameter is required and should be a valid number.' }), {
+        status: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          ...corsHeaders
+        }
+      });
+      }
       if (!clip_id) {
         return new NextResponse(JSON.stringify({ error: 'Clip id is required' }), {
           status: 400,
