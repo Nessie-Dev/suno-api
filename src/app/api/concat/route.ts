@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   if (req.method === 'POST') {
     try {
       const body = await req.json();
-      const { clip_id } = body;
+      const { clip_id, instance } = body;
       if (!clip_id) {
         return new NextResponse(JSON.stringify({ error: 'Clip id is required' }), {
           status: 400,
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
           }
         });
       }
-      const apiInstance = await sunoApi();
+      const apiInstance = await sunoApi(Number(instance));
       const audioInfo = await (await apiInstance).concatenate(clip_id);
       return new NextResponse(JSON.stringify(audioInfo), {
         status: 200,
