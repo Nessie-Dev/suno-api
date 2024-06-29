@@ -47,7 +47,9 @@ export async function POST(req: NextRequest) {
           }
         });
       }
-      return new NextResponse(JSON.stringify({ error: 'Internal server error' }), {
+      const errorMessage = (error as Error).message || 'Unknown error';
+
+      return new NextResponse(JSON.stringify({ error: 'Internal server error: ' + errorMessage }), {
         status: 500,
         headers: {
           'Content-Type': 'application/json',
